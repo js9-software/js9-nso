@@ -1,0 +1,9 @@
+services:
+  server:
+    build:
+      context: .
+    ports:
+      - 9999:9999
+      - 2718:2718
+    tmpfs:
+      - /app/web/tmp

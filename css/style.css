@@ -1,0 +1,135 @@
+body {font-family: Arial, Helvetica, sans-serif; background-color:#ffffff; margin: 0; padding: 0;}
+a:link {color:#009aff; text-decoration:none;} 
+a:visited {color:#009aff; text-decoration:none;} 
+a:hover {color:#009aff; text-decoration:none;} 
+a:active {color:#009aff; text-decoration:none;}
+h1 {font-family: Arial, Helvetica, sans-serif; font-size: 48px; text-align: left; font-weight:bold;  color:#ffffff;}
+h2 {font-family: Arial, Helvetica, sans-serif; font-size: 36px; text-align: left; font-weight: normal;  color:#ffffff;}
+h3 {font-family: Arial, Helvetica, sans-serif; font-size: 24px; text-align: left; font-weight:lighter; color:#ffffff;}
+h4 {font-family: Arial, Helvetica, sans-serif; font-size: 36px; text-align: left; font-weight: normal;  color:#2B2B2B; margin:0px; float:left; margin-bottom:100px; }
+h5 {font-family: Arial, Helvetica, sans-serif; font-size: 18px; text-align: left; font-weight: 700; font-style: normal; color:#4a4a4a; letter-spacing: 0.5px; margin:20px 0;}
+
+p {font-family: Arial, Helvetica, sans-serif;  font-size: 16px; text-align: left; margin-top: 5px; font-weight: normal; color:#2B2B2B; float:left; margin-left:10%;}
+p.graph {font-family: Arial, Helvetica, sans-serif; font-size: 15px; text-align: left; font-weight: normal; line-height:20px; color:#2b2b2b;}
+p.steps {font-size: 14px; text-align: left; font-weight: 400; font-style: normal; line-height:20px; width:100%; color:#2B2B2B; margin:5px 0px 2px 0px; }
+img {display: block; max-width: 100%; height: auto;}
+#title {position:absolute; top:46%; left:11.8%;}
+#nasa {position:absolute; top:6%; left:2%;}
+#chandra {position:absolute; top:8.8%; right:4.1%;}
+#banner { position:relative;}
+#wrapper { max-width:1440px; margin-left:auto; margin-right:auto;}
+#footer1 {padding:25px; background-color:#0d1630; text-align:center;}
+.footer1_box {font-family: Arial, Helvetica, sans-serif; width: 21% height: 50px; font-size:11px; background-color: #000000; color:#ffffff; display: inline-block; padding:5px 35px; vertical-align:top; text-align:left;  margin-right:1%;}
+
+
+
+#footer2 {padding:25px 10px 10px 50px; margin: auto; background-color: #ffffff; float:left;}
+.social {height:50px; float:left; vertical-align:top; margin-left:10px;}
+#bs_button {text-align:center; width:357px; margin: auto; background-image:url(../images/Beginner_steps_button.png); background-repeat:no-repeat;}
+/*#bs_button:hover {background-image:url(../images/Beginner_step_button_hover.png);}*/
+#ns_button {text-align:center; width:357px; margin: auto; background-image:url(../images/ns_button.png); background-repeat:no-repeat;}
+/*#ns_button:hover {background-image:url(../images/ns_button_hover.png);}*/
+.embed-container { 
+position: relative; 
+padding-bottom: 56.25%; 
+height: 0; 
+overflow: hidden; 
+max-width: 100%; 
+} 
+.embed-container iframe, .embed-container object, .embed-container embed { 
+position: absolute; 
+top: 0; 
+left: 0; 
+width: 100%; 
+height: 100%; 
+}
+video {width:100%; max-width:650px; height:auto;}
+
+.my3d{ /*headerclass*/
+cursor: hand;
+cursor: pointer;
+padding: 22px 0px 22px 125px;
+height:36px;
+margin:0px;
+}
+
+
+
+.intro{ /*header open of 1st*/
+padding: 22px 0px 22px 125px;
+background:#3C5ED2;
+height:36px;
+margin:0px;
+}
+
+.theintro{
+background-color:#EDEEF0;  
+padding:125px; 
+float:left; 
+text-align:left;}
+
+.beginners{ /*header open of 2nd*/
+padding: 22px 0px 22px 125px;
+background:#89A2F6;
+height:36px;
+margin:0px;
+}
+
+
+.experienced{ /*header open of 3rd*/
+padding: 22px 0px 22px 125px;
+background:#069F84;
+height:36px;
+margin:0px;
+}
+
+.explore{ /*header open of 4th*/
+padding: 22px 0px 22px 125px;
+background:#82498E;
+height:36px;
+margin:0px;
+}
+
+br {
+   display: block;
+   margin: 0px 0px 0px 0px;
+}
+
+
+/*second footer*/
+.footimg { margin:0; width:auto; padding-left:2%; padding-right:2%; vertical-align: middle; display:inline-block;}
+.fund {padding: 60px 0; background-color: #383740; color: #fff; height:auto; }
+.fundcontainer { max-width: 1140px; margin-left: auto; margin-right: auto; padding-left: 15px; padding-right: 15px;}
+.fundrow { margin:0 -15px; position:relative; }
+.rowleft {float: left; width: 57.33333%; margin-left:2%; font-family: Arial, Helvetica, sans-serif; font-size: 12px; line-height: 1.5; text-align:left;}
+.rowright {float: left; width: 30.66667%; padding-left: 10%;}
+.logosin {float: left; width: 100%;}
+.fundlogos img {width: auto; text-align:center; margin: 0 40px; line-height: 55px; vertical-align: middle; border-style: none;}
+.fund a img {opacity: 0.7;}
+.fund a:hover img {opacity:1}
+.fund img {width:auto;  margin:0 40px; float:left;}
+.fund .stsci {height:55px; float:left;}
+.fund .ipac {height:40px; float:left;}
+.fund .jpl { height:25px; float:left; vertical-align: middle;}
+.fund .sao { height:55px; float:left;}
+.fund .sonoma { height:35px; float:left;}
+.fund .uol { max-width:200px;}
+
+
+
+
+@media only screen and (max-width: 800px) {
+p { font-size: 14px; }
+p.graph { font-size: 14px; }
+h1 {font-size: 90%;}
+h2 {font-size: 90%;}
+h4 {font-size: 90%;}
+#nasa img {width: 50%; height: auto;}
+#chandra img {width: 50%; height: auto;}
+.theintro{padding:25px;}
+
+/*second footer*/
+.rowleft {width: 90%;}
+.rowright {width: 100%; padding-left: 0; margin-top:3%;}
+.footimg {width:80%; margin:20px;}
+}
