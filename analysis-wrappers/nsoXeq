@@ -1,0 +1,153 @@
+#!/bin/bash
+# set -x
+
+# if we are being called via CGI, send stderr to stdout
+if [ x"$QUERY_STRING" != x ]; then
+  exec 2>&1
+fi
+
+# error handler: send to stderr (which will go to stdout for CGI)
+error() {
+  echo "$*" | egrep "^ERROR:" 2>&1 >/dev/null
+  if [ $? = 0 ]; then
+    echo "$*" >&2
+  else
+    echo "ERROR: $*" >&2
+  fi
+  exit 1
+}
+
+xsed() {
+  sed 's#'${JS9_DIR:-none}'#${JS9_DIR}#g;'
+}
+
+checkheader() {
+  # read input file FITS header and set parameters
+  IFILE="$1"
+  funhead $IFILE'[1]'		|\
+  sed 's#/.*##g;s#=# = #g'	|\
+  awk '
+  BEGIN{
+    dtnb = 1
+  }
+  /^TELESCOP *=.*/{tele=$3}
+  /^INSTRUME *=.*/{inst=$3}
+  /^TSTART *=.*/{tstart=$3}
+  /^TSTOP *=.*/{tstop=$3}
+  /^TIMEDEL *=.*/{dtnb=$3}
+  END{
+    toupper(tele)
+    gsub("\047","",tele)
+    toupper(inst)
+    gsub("\047","",inst)
+    if( match(inst,"HRC") ){
+      dtnb=0.001
+    }
+    printf "telescope=%s\n", tele
+    printf "instrume=%s\n", inst
+    printf "dtnb=%f\n", dtnb
+    printf "nbint=%.0f\n", (tstop-tstart)/dtnb
+  }
+  ' > /app/web/tmp/params.sh
+  . /app/web/tmp/params.sh
+  rm -f /app/web/tmp/params.sh
+  if [ x"$telescope" != "xCHANDRA" -a x"$telescope" != "xEXOSAT" ]; then
+    error "Only CHANDRA or EXOSAT data can be used with these timing tasks (${telescope})"
+  fi
+}
+
+# sanity check that we have system programs in the path
+hash awk sed egrep du mv rm cat echo 1>/dev/null 2>&1
+if [ $? != 0 ]; then
+      error "can't find system programs (e.g. awk, sed). Please check the PATH of the JS9 helper."
+fi
+
+# process known commands
+CMD="$1"; shift;
+case $CMD in
+flux)
+    # look for required args
+    if [ $# -lt 1 ]; then
+        error "flux requires a filename"
+    fi
+    nsoFlux "$1" "$2" "$3" | xsed
+    exit 0
+    ;;
+
+lcurve)
+    # look for required args
+    if [ $# -lt 2 ]; then
+      error "required args: ifile region"
+    fi
+    # input file
+    IFILE=`echo $1 | sed 's/\[.*\]//g'`
+    # region
+    REGION="$2"
+    # ifile without path and with some characters changed
+    ROOT=`echo $IFILE|awk -F/ '{print $NF}'|sed 's/[:=]/_/g'|sed 's/\.gz$//'`
+    # make sure we are using the right data
+    checkheader $IFILE
+    case $telescope in
+    CHANDRA)
+      if [ x"$REGION" = x ]; then
+        REGION="field"
+      fi
+      TFILE=filt_${ROOT}
+      funtable "$IFILE[EVENTS+,$REGION]" $TFILE
+      ;;
+    EXOSAT)
+      TFILE=$IFILE
+      ;;
+    esac
+    lcurve cfile1=$TFILE window="-" dtnb=$dtnb nbint=$nbint nser=1 outfile="${ROOT}.lc" plot=no | sed '/.*% completed/d' 2>&1 >/dev/null
+    fundisp ${ROOT}.lc"[1][rate1>0]" "time rate1" | nso2flot -c "blue" -t "Light Curve" -x "Time (sec)" -y "Counts/sec in selected region(s)" | xsed
+    ;;
+
+powspec)
+    # look for required args
+    if [ $# -lt 1 ]; then
+      error "required args: ifile"
+    fi
+    # input file
+    IFILE=`echo $1 | sed 's/\[.*\]//g'`
+    # ifile without path and with some characters changed
+    ROOT=`echo $IFILE|awk -F/ '{print $NF}'|sed 's/[:=]/_/g'|sed 's/\.gz$//'`
+    # make sure we are using the right data
+    checkheader $IFILE
+    if [ ! -r ${ROOT}.lc ]; then
+      error "${ROOT}.lc is missing. Please run lcurve to create it"
+    fi
+    powspec cfile1=${ROOT}.lc dtnb=$dtnb nbint=$nbint nintfm=1 rebin=0 window="-" outfile="${ROOT}.fps" lchat=8 plot=no | sed '/.*% completed/d' 2>&1 >/dev/null
+    fundisp ${ROOT}.fps"[1]" "frequency power" | nso2flot -c "green" -t "Power Spectrum" -x "Frequency (Hz)" -y "Power in selected region(s)" | xsed
+    rm -f ${ROOT}.fps
+    ;;
+
+efold)
+    # look for required args
+    if [ $# -lt 3 ]; then
+      error "required args: ifile dper nphase"
+    fi
+    # input file
+    IFILE=`echo $1 | sed 's/\[.*\]//g'`
+    # folding args
+    DPER="$2"
+    NPHASE="$3"
+    # ifile without path and with some characters changed
+    ROOT=`echo $IFILE|awk -F/ '{print $NF}'|sed 's/[:=]/_/g'|sed 's/\.gz$//'`
+    # make sure we are using the right data
+    checkheader $IFILE
+    if [ ! -r ${ROOT}.lc ]; then
+      error "${ROOT}.lc is missing. Please run lcurve to create it"
+    fi
+    efold cfile1=${ROOT}.lc window="-" nser=1 sepoch=INDEF dper=$DPER nphase=$NPHASE nbint=INDEF nintfm=INDEF outfile="${ROOT}.fef" lchat=8 plot=no | sed '/.*% completed/d' 2>&1 >/dev/null
+    fundisp ${ROOT}.fef"[1]" "phase rate1 error1" | awk 'NR>=3{print $0}' > temp.plot
+    (awk '{print $1,$2,$3}' < temp.plot; awk '{print 1+$1,$2,$3}' < temp.plot)  > temp2.plot
+    cat temp2.plot | nso2flot -c "purple" -e -t "Period Fold"  -x "Phase" -y "Relative Brightness" | xsed
+    rm -f ${ROOT}.fps
+    rm -f temp.plot temp2.plot
+    ;;
+
+*)
+    error "unknown NSO function: $CMD"
+    ;;
+esac

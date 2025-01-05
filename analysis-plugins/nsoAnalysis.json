@@ -1,0 +1,37 @@
+[
+  {
+    "name": "NSO",
+    "title": "NSO Analysis",
+    "files": "fits",
+    "rtype": "---"
+  },
+  {
+    "name": "lcurve",
+    "title": "Light Curve",
+    "files": "fits",
+    "action": "nsoXeq lcurve $filename $regions",
+    "rtype": "plot"
+  },
+  {
+    "name": "powspec",
+    "title": "Power Spectrum",
+    "files": "fits",
+    "action": "nsoXeq powspec $filename",
+    "rtype": "plot"
+  },
+  {
+    "name": "efold",
+    "title": "Period Folding",
+    "files": "fits",
+    "purl": "./params/efold.html",
+    "action": "nsoXeq efold $filename $dper $nphase",
+    "rtype": "plot"
+  },
+  {
+    "name": "flux",
+    "title": "Flux in Regions",
+    "files": "fits",
+    "action": "nsoXeq flux $filename $sregions $bregions",
+    "rtype": "text"
+  }
+]

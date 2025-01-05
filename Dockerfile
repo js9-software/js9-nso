@@ -68,10 +68,13 @@ RUN apt-get update && apt-get upgrade -y && apt-get dist-upgrade -y && \
 
 COPY --from=heasoft_builder /opt/heasoft /opt/heasoft
 
-
 RUN mkdir /tmp/pfiles
 
 RUN chmod a+wr /tmp/pfiles
+
+RUN mkdir -p /opt/nso/bin
+
+COPY ./bin /opt/nso/bin
 
 ENV CC=/usr/bin/gcc \
     CXX=/usr/bin/g++ \
@@ -81,7 +84,7 @@ ENV CC=/usr/bin/gcc \
     PERL5LIB=/opt/heasoft/lib/perl \
     PYTHON=/usr/bin/python \
     PYTHONPATH=/opt/heasoft/lib/python:/opt/heasoft/lib \
-    PATH=/opt/heasoft/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin \
+    PATH=/opt/heasoft/bin:/opt/nso/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin \
     HEADAS=/opt/heasoft \
     LHEASOFT=/opt/heasoft \
     FTOOLS=/opt/heasoft \
@@ -109,3 +112,5 @@ ENV CC=/usr/bin/gcc \
 COPY ./index.html /app/web/index.html
 COPY ./images /app/web/images
 COPY ./css /app/web/css
+COPY ./analysis-plugins/nsoAnalysis.json /app/web/analysis-plugins/nsoAnalysis.json
+COPY ./analysis-wrappers/nsoXeq /app/web/analysis-wrappers/nsoXeq

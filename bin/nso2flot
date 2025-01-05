@@ -1,0 +1,84 @@
+#!/bin/sh
+# set -x
+
+LC_NUMERIC=en_US.ISO8859-1
+export LC_NUMERIC
+
+color="blue"
+doerror=0
+title="Plot"
+xlabel=""
+ylabel=""
+while [ x"$1" != x ]; do
+    case $1 in
+	-c) shift
+	    color="$1"
+	    shift
+	    continue;;
+	-e) shift
+	    doerror=1
+	    continue;;
+	-t) shift
+	    title="$1"
+	    shift
+	    continue;;
+	-x) shift
+	    xlabel="$1"
+	    shift
+	    continue;;
+	-y) shift
+	    ylabel="$1"
+	    shift
+	    continue;;
+	*)  
+            break;;
+    esac
+done
+
+awk -v color="${color}" -v doerr="${doerr}" -v title="${title}" -v xlabel="${xlabel}" -v ylabel="${ylabel}" '
+BEGIN{
+  mode=1
+  npts=0
+}
+mode==1{
+  if( NR == 1 ){
+    if( xlabel == "" ){
+        xlabel = $1
+    }
+    if( ylabel == "" ){
+        ylabel = $2
+    }
+  }
+  if( NR == 2 ){
+    printf "{\042color\042:\042%s\042,\042label\042:\042%s\042,", color, title
+    if( doerr ){
+      printf "\042points\042:{\042errorbars\042:\042y\042,\042yerr\042:{\042show\042:\042true\042,\042color\042:\042red\042}},"
+    }
+    printf "\042data\042:["
+    mode = 2
+    next
+  }
+}
+mode==2{
+  if( NF >= 2 ){
+    if( npts > 0 ){
+      printf ","
+    }
+    npts = npts + 1
+    if( doerr ){
+        printf "[%s,%s,%s]", $1, $2, $3
+    } else {
+        printf "[%s,%s]", $1, $2
+    }
+  } else{
+    mode = 3
+  }
+  next
+}
+END{
+  if( mode > 1 ){
+    printf "],\042opts\042:{\042xaxis\042:{\042axisLabel\042:\042%s\042},\042yaxis\042:{\042axisLabel\042:\042%s\042}}}", xlabel, ylabel
+  }
+}
+'
+exit 0
