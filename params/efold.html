@@ -1,0 +1,47 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html><head>
+<meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+<title>Period Fold</title>
+</head>
+
+<body>
+
+<form id="efoldForm" name="efoldForm" class="js9AnalysisForm" action="">
+
+<div class="linegroup">
+<span class="column_A">
+<b>Enter value for period</b>
+</span>
+<span class="column_B">
+<input type="text" class="text_B" id="dper" name="dper" autocapitalize="none" autocorrect="off">
+</span>
+<span class="column_C">
+(units: seconds)
+</span>
+</div>
+
+<div class="linegroup">
+<span class="column_A">
+<b>Enter number of phase bins</b>
+</span>
+<span class="column_B">
+<input type="text" class="text_B" id="nphase" name="nphase" value="25" autocapitalize="none" autocorrect="off">
+</span>
+<span class="column_C">
+(units: none)
+</span>
+</div>
+
+<p>
+<input id="run" name="run" type="button" class="button" value="Run" onclick="return JS9.SubmitAnalysis(this);">
+
+<input id="close" name="Close" type="button" class="button" value="Close" onclick="var form = $(this).closest('form');
+var dhtml = form.closest('.dhtmlwindow')[0];
+dhtml.close();
+return false;" style="float: right;">
+
+</p></form>
+
+
+
+</body></html>

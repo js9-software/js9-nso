@@ -114,3 +114,4 @@ COPY ./images /app/web/images
 COPY ./css /app/web/css
 COPY ./analysis-plugins/nsoAnalysis.json /app/web/analysis-plugins/nsoAnalysis.json
 COPY ./analysis-wrappers/nsoXeq /app/web/analysis-wrappers/nsoXeq
+COPY ./params /app/web/params
