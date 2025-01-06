@@ -48,9 +48,9 @@ checkheader() {
     printf "dtnb=%f\n", dtnb
     printf "nbint=%.0f\n", (tstop-tstart)/dtnb
   }
-  ' > /app/web/tmp/params.sh
-  . /app/web/tmp/params.sh
-  rm -f /app/web/tmp/params.sh
+  ' > /tmp/pfiles/params.sh
+  . /tmp/pfiles/params.sh
+  rm -f /tmp/pfiles/params.sh
   if [ x"$telescope" != "xCHANDRA" -a x"$telescope" != "xEXOSAT" ]; then
     error "Only CHANDRA or EXOSAT data can be used with these timing tasks (${telescope})"
   fi
