@@ -1,9 +1,27 @@
 services:
-  server:
+  web:
     build:
       context: .
-    ports:
-      - 9999:9999
-      - 2718:2718
-    tmpfs:
-      - /app/web/tmp
+    volumes:
+      # Customize the js9 helper client preferences, mainly to change it to look
+      # for the helper server on port 443. Note that the helper service is still
+      # running on port 2718. It's being proxied by path below.
+      - ./js9prefs.js:/app/web/js9prefs.js
+      - temp_vol:/app/web/tmp
+    restart: unless-stopped
+    networks:
+      - caddy
+    labels:
+      caddy: nso.js9.org
+      caddy.0_reverse_proxy: /socket.io/* "{{upstreams 2718}}"
+      caddy.1_reverse_proxy: "{{upstreams 9999}}"
+
+networks:
+  caddy:
+    external: true
+
+volumes:
+  temp_vol:
+    driver_opts:
+      type: tmpfs
+      device: tmpfs
