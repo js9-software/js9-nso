@@ -56,7 +56,7 @@ RUN cd `ls -d heasoft-*/BUILD_DIR` \
 RUN /bin/bash -c 'cd /opt/heasoft/; for loop in *64*/*; do ln -sf $loop; done'
 
 # Use the standard JS9 base image.
-FROM ghcr.io/js9-software/js9:v3.9-4-gc4ee33e5
+FROM ghcr.io/js9-software/js9:v3.9.0
 
 # Some of the ftools binaries need a fortran library. Since the builder and js9
 # base images both use Debian, we can just get it again from the package repo.
