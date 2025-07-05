@@ -8,16 +8,25 @@ It also replaces the index page and adds documentation.
 
 - Docker
 - Docker Compose
+- A reverse proxy. [Caddy-Docker-Proxy](https://github.com/lucaslorentz/caddy-docker-proxy) is recommended. If using another reverse proxy, the included `docker compose` file will need to be modified. For local development, [caddystack](https://github.com/freethoughtdesign/caddystack) can be used as it includes a DNS server that resolves `.test` domains.
 
 ## Quick start
+
+Copy `.env.example` to `.env` and populate the environment variables as needed. They are used in the `compose.yml` file.
+
+- `HOST` - The hostname of the site. Defaults to `nso.js9.org`.
+- `NETWORK` - The docker network used to communicate with the Caddy-Docker-Proxy reverse proxy. Defaults to `caddy`.
+- `TLS` - The Caddy server directive to configure `https`. Defaults to `email`. Use `internal` for local development.
+
+Then run the following:
 
 ```
 docker compose up --build
 ```
 
-The first time the above command is run, it can take quite a while to build the heasoft binaries. Subsequent runs will generally used cached layers and the process will be much faster.
+The first time the above `docker compose` command is run, it can take quite a while to build the heasoft binaries. Subsequent runs will generally used cached layers and the process will be much faster.
 
-Once the container has been built and started, visit http://localhost:9999 in a web browser.
+Once the container has been built and started, visit the site using the `HOST` URL set in `.env` in a web browser.
 
 ## Modifying the index page
 

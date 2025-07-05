@@ -10,14 +10,16 @@ services:
       - temp_vol:/app/web/tmp
     restart: unless-stopped
     networks:
-      - caddy
+      - js9net
     labels:
-      caddy: nso.js9.org
+      caddy: ${HOST-nso.js9.org}
+      caddy.tls: ${TLS-email}
       caddy.0_reverse_proxy: /socket.io/* "{{upstreams 2718}}"
       caddy.1_reverse_proxy: "{{upstreams 9999}}"
 
 networks:
-  caddy:
+  js9net:
+    name: ${NETWORK-caddy}
     external: true
 
 volumes:
