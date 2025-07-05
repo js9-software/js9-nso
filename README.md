@@ -37,3 +37,20 @@ The following files in this repository will be copied into the container during 
 - All files in `css/`
 
 As you make modifications or additions, you can stop the running container (CTRL-c) and re-start and re-build it with `docker compose up --build`. Then reload the web page at http://localhost:9999 to test the changes.
+
+## Deployment
+
+An easy way to deploy this application is to create a git remote with the following configuration:
+
+```
+[receive]
+        denyCurrentBranch = updateInstead
+```
+
+Then:
+
+- `git push` this repository to the remote server
+- `ssh` into the remote server
+- `cd` to the repository working directory
+- Create and edit a `.env` file if necessary.
+- `docker compose up --build -d`.
