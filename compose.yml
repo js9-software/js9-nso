@@ -13,7 +13,7 @@ services:
       - js9net
     labels:
       caddy: ${HOST-nso.js9.org}
-      caddy.tls: ${TLS-email}
+      caddy.tls: ${TLS-admin@js9.org}
       caddy.0_reverse_proxy: /socket.io/* "{{upstreams 2718}}"
       caddy.1_reverse_proxy: "{{upstreams 9999}}"
 
